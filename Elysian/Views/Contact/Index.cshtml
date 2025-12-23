@@ -1,0 +1,64 @@
+﻿@model Elysian.Models.Message
+
+<section class="contact-section py-5" style="background: linear-gradient(135deg, #f9f9f9, #ffffff);">
+    <div class="container">
+        <!-- Heading -->
+        <div class="text-center mb-5">
+            <h1 class="fw-bold display-5 text-dark">Get in <span class="text-rose">Touch</span></h1>
+            <p class="text-muted fs-5">We’d love to hear from you. Send us a message or find us on the map.</p>
+            <hr class="w-25 mx-auto border-3 border-primary" />
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success text-center shadow-sm rounded-3">@TempData["Success"]</div>
+        }
+
+        <div class="row gy-4">
+            <!-- Contact Form Left -->
+            <div class="col-lg-6">
+                <div class="p-4 bg-white rounded-4 shadow-lg">
+                    <h4 class="mb-4 fw-semibold text-dark">📩 Send us a Message</h4>
+                    <form asp-action="Index" method="post">
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label fw-semibold"></label>
+                            <input asp-for="Name" class="form-control rounded-3 shadow-sm" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold"></label>
+                            <input asp-for="Email" class="form-control rounded-3 shadow-sm" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label fw-semibold">Message</label>
+                            <textarea asp-for="Content" rows="5" class="form-control rounded-3 shadow-sm"></textarea>
+                            <span asp-validation-for="Content" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-dark w-100 py-2 rounded-3 fw-bold shadow">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Map Right -->
+            <div class="col-lg-6">
+                <div class="map-container rounded-4 shadow-lg overflow-hidden" style="height: 100%;">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3620.478632357174!2d67.0011!3d24.8607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDUxJzM4LjUiTiA2N8KwMDAnMDQuMiJF!5e0!3m2!1sen!2s!4v1691947200000!5m2!1sen!2s"
+                            width="100%"
+                            height="100%"
+                            style="border:0; min-height: 400px;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

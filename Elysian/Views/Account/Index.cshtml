@@ -1,0 +1,211 @@
+﻿@model Elysian.Models.ApplicationUser
+
+@{
+    ViewData["Title"] = "My Account";
+}
+
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold display-5 text-dark">
+            👤 My <span class="text-rose">Account</span>
+        </h2>
+        <p class="text-muted">Manage your profile and view your orders</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Profile Information -->
+        <div class="col-lg-4">
+            <div class="card shadow-lg border-0 rounded-4 h-100">
+                <div class="card-header bg-dark text-white rounded-4 rounded-bottom-0 py-4">
+                    <h5 class="mb-0">📊 Profile Overview</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+                        {
+                            <!-- Show uploaded profile picture -->
+                            <img src="@Model.ProfilePicture"
+                                 alt="Profile Picture"
+                                 class="rounded-circle shadow-lg mb-3"
+                                 style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #DEB64B;">
+                        }
+                        else
+                        {
+                            <!-- Show default icon if no profile picture -->
+                            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                                 style="width: 100px; height: 100px; background: rgba(222, 182, 75, 0.15); border: 3px solid #DEB64B;">
+                                <i class="bi bi-person-fill" style="font-size: 2.5rem; color: #DEB64B;"></i>
+                            </div>
+                        }
+                        <h4 class="fw-bold">@Model.FullName</h4>
+                        <p class="text-muted">@Model.Email</p>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                            <span>🆔 Member Since</span>
+                            <span class="fw-semibold">@Model.CreatedAt.ToString("MMM yyyy")</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                            <span>📧 Email Verified</span>
+                            <span class="badge @(Model.EmailConfirmed ? "bg-success" : "bg-warning")">
+                                @(Model.EmailConfirmed ? "Yes" : "No")
+                            </span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                            <span>📞 Phone</span>
+                            <span class="fw-semibold">@(Model.PhoneNumber ?? "Not set")</span>
+                        </div>
+                    </div>
+
+                    <!-- Logout Button -->
+                    <div class="card-footer bg-transparent border-0 mt-4 pt-3 text-center">
+                        <form asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="btn btn-outline-danger rounded-pill px-4">
+                                <i class="fa-solid fa-right-from-bracket me-2"></i>Sign Out
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-lg-8">
+            <div class="row g-4">
+                <!-- Order Management -->
+                <div class="col-md-6">
+                    <div class="card shadow-lg border-0 rounded-4 h-100">
+                        <div class="card-header bg-warning text-dark rounded-4 rounded-bottom-0 py-3">
+                            <h5 class="mb-0">🛍️ Order Management</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-grid gap-3">
+                                <a asp-controller="Order" asp-action="OrderHistory"
+                                   class="btn btn-outline-dark btn-lg text-start py-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-clock-history me-3" style="font-size: 1.5rem;"></i>
+                                        <div>
+                                            <h6 class="mb-1 fw-bold">Order History</h6>
+                                            <small class="text-muted">View all your past orders</small>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <a asp-controller="Cart" asp-action="Index"
+                                   class="btn btn-outline-dark btn-lg text-start py-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-cart3 me-3" style="font-size: 1.5rem;"></i>
+                                        <div>
+                                            <h6 class="mb-1 fw-bold">Shopping Cart</h6>
+                                            <small class="text-muted">Manage your cart items</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Settings -->
+                <div class="col-md-6">
+                    <div class="card shadow-lg border-0 rounded-4 h-100">
+                        <div class="card-header bg-info text-white rounded-4 rounded-bottom-0 py-3">
+                            <h5 class="mb-0">⚙️ Account Settings</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-grid gap-3">
+                                <a asp-action="EditProfile" asp-controller="Account"
+                                   class="btn btn-outline-dark btn-lg text-start py-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-pencil-square me-3" style="font-size: 1.5rem;"></i>
+                                        <div>
+                                            <h6 class="mb-1 fw-bold">Edit Profile</h6>
+                                            <small class="text-muted">Update your personal information</small>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <a asp-action="ChangePassword" asp-controller="Account"
+                                   class="btn btn-outline-dark btn-lg text-start py-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-shield-lock me-3" style="font-size: 1.5rem;"></i>
+                                        <div>
+                                            <h6 class="mb-1 fw-bold">Change Password</h6>
+                                            <small class="text-muted">Update your login password</small>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="col-12">
+                    <div class="card shadow-lg border-0 rounded-4">
+                        <div class="card-header bg-success text-white rounded-4 rounded-bottom-0 py-3">
+                            <h5 class="mb-0">📈 Recent Activity</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            @{
+                                var recentOrders = ViewBag.RecentOrders as List<Elysian.Models.Order> ?? new List<Elysian.Models.Order>();
+                            }
+
+                            @if (recentOrders.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-borderless">
+                                        <thead>
+                                            <tr>
+                                                <th>Order #</th>
+                                                <th>Date</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var order in recentOrders.Take(3))
+                                            {
+                                                <tr>
+                                                    <td class="fw-semibold">#@order.Id</td>
+                                                    <td>@order.OrderDate.ToString("MMM dd")</td>
+                                                    <td class="fw-bold text-rose">Rs. @order.TotalAmount</td>
+                                                    <td>
+                                                        <span class="badge @(order.Status == "Pending" ? "bg-warning" : "bg-success")">
+                                                            @order.Status
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <a asp-controller="Order" asp-action="OrderDetails" asp-route-id="@order.Id"
+                                                           class="btn btn-sm btn-outline-dark">View</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <a asp-controller="Order" asp-action="OrderHistory" class="btn btn-outline-dark">
+                                        View All Orders
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-4">
+                                    <i class="bi bi-cart-x" style="font-size: 3rem; color: #6c757d;"></i>
+                                    <p class="text-muted mt-2">No recent orders</p>
+                                    <a asp-controller="Shop" asp-action="Index" class="btn btn-dark mt-2">
+                                        Start Shopping
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

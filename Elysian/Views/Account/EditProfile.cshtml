@@ -1,0 +1,115 @@
+﻿@model Elysian.Models.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-dark text-white rounded-4 rounded-bottom-0 py-3">
+                    <h4 class="mb-0">✏️ Edit Profile</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+
+                        <!-- Profile Picture Section -->
+                        <div class="text-center mb-4">
+                            <div class="position-relative d-inline-block">
+                                @if (!string.IsNullOrEmpty(Model.ExistingProfilePicture))
+                                {
+                                    <img id="profileImage" src="@Model.ExistingProfilePicture"
+                                         alt="Profile Picture"
+                                         class="rounded-circle shadow-lg"
+                                         style="width: 150px; height: 150px; object-fit: cover;">
+                                }
+                                else
+                                {
+                                    <div id="profileImage" class="rounded-circle d-flex align-items-center justify-content-center bg-light border shadow-lg"
+                                         style="width: 150px; height: 150px;">
+                                        <i class="bi bi-person-fill" style="font-size: 3rem; color: #6c757d;"></i>
+                                    </div>
+                                }
+                                <label for="ProfileImage" class="btn btn-warning rounded-pill position-absolute bottom-0 end-0 m-2"
+                                       style="cursor: pointer;">
+                                    <i class="bi bi-camera"></i>
+                                </label>
+                                <input asp-for="ProfileImage" type="file" class="d-none"
+                                       accept="image/*" onchange="previewImage(this)" />
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted">Click camera icon to upload profile picture</small>
+                            </div>
+                        </div>
+
+                        <!-- Form Fields -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FullName" class="form-label fw-semibold"></label>
+                                    <input asp-for="FullName" class="form-control rounded-3" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="PhoneNumber" class="form-label fw-semibold"></label>
+                                    <input asp-for="PhoneNumber" class="form-control rounded-3" />
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="Email" class="form-label fw-semibold"></label>
+                            <input asp-for="Email" class="form-control rounded-3" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <small class="form-text text-muted">Changing email will require verification.</small>
+                        </div>
+
+                        <!-- Hidden field for existing picture -->
+                        <input asp-for="ExistingProfilePicture" type="hidden" />
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-dark rounded-pill px-4">
+                                ← Back to Account
+                            </a>
+                            <button type="submit" class="btn btn-dark rounded-pill px-4">
+                                💾 Update Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = document.getElementById('profileImage');
+                    if (img.tagName === 'IMG') {
+                        img.src = e.target.result;
+                    } else {
+                        // Replace div with img
+                        var newImg = document.createElement('img');
+                        newImg.id = 'profileImage';
+                        newImg.src = e.target.result;
+                        newImg.className = 'rounded-circle shadow-lg';
+                        newImg.style = 'width: 150px; height: 150px; object-fit: cover;';
+                        img.parentNode.replaceChild(newImg, img);
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

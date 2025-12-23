@@ -1,0 +1,545 @@
+﻿@model IEnumerable<Elysian.Models.Product>
+
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<head>
+    <style>
+        .hero-banner {
+            min-height: 100vh;
+            background: linear-gradient(to right, #fdfaf8, #fff8e7);
+            display: flex;
+            align-items: center;
+            padding: 80px 0;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #1c1c1c;
+        }
+
+        .btn-rose-gold {
+            background: linear-gradient(135deg, #DEB64B, #caa94a);
+            color: #fff;
+            border-radius: 30px;
+            padding: 14px 36px;
+            font-size: 1rem;
+            box-shadow: 0px 6px 15px rgba(222,182,75,0.3);
+            transition: all 0.3s ease;
+        }
+
+            .btn-rose-gold:hover {
+                transform: translateY(-3px);
+                box-shadow: 0px 10px 20px rgba(222,182,75,0.45);
+            }
+
+
+        .image-section img {
+            object-fit: cover;
+            height: 100%;
+        }
+
+
+    </style>
+</head>
+
+<section class="hero-section">
+    <div class="container-fluid">
+        <div class="row align-items-center hero-banner">
+            <div class="col-lg-6 text-section ps-5">
+                <h1 class="display-4 fw-bold hero-title">Elevate Your Elegance</h1>
+                <p class="lead">Discover timeless craftsmanship and modern luxury with Elysian Jewels.</p>
+                <a asp-controller="Shop" asp-action="Index" class="btn btn-rose-gold">Explore Collections</a>
+
+            </div>
+            <div class="col-lg-6 p-0 image-section">
+                <img src="~/images/hero-jewellery.png" class="img-fluid w-100" alt="Elegant Jewellery">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<section class="category-section py-5">
+    <div class="container text-center">
+        <h2 class="section-title mb-4">Shop by Category</h2>
+        <br /><br /><br /><br />
+        <div class="row justify-content-center">
+
+            <!-- Necklaces -->
+            <div class="col-md-3 col-sm-6 mb-4">
+                <a href="/Shop?category=necklace">
+                    <div class="category-card">
+                        <img src="~/images/category-necklace.jpg" alt="Necklaces">
+                        <div class="category-overlay">
+                            <span>Necklaces</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Earrings -->
+            <div class="col-md-3 col-sm-6 mb-4">
+                <a href="/Shop?category=Earings">
+                    <div class="category-card">
+                        <img src="~/images/category-earrings.jpg" alt="Earrings">
+                        <div class="category-overlay">
+                            <span>Earrings</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Rings -->
+            <div class="col-md-3 col-sm-6 mb-4">
+                <a href="/Shop?category=ring">
+                    <div class="category-card">
+                        <img src="~/images/category-rings.jpg" alt="Rings">
+                        <div class="category-overlay">
+                            <span>Rings</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+<section class="about-section py-5 text-center">
+    <div class="container">
+        <img src="~/images/about-logo.png" alt="Jewellery Icon" class="about-logo mb-4" />
+
+        <h2 class="about-title mb-3">We make high-quality, handcrafted jewelry for over a decade, having the same passion & values!</h2>
+
+        <p class="about-subtext mb-4">
+            At Elysian Jewels, we blend tradition with modern artistry to create
+            exquisite pieces that celebrate your unique story. From classic rings to
+            contemporary necklaces, our collections reflect grace, detail, and individuality.
+        </p>
+
+        <a asp-controller="About" asp-action="Index" class="btn btn-read-more">Read More</a>
+
+    </div>
+</section>
+<br />
+<!--New arrival-->
+<section class="py-5 px-4" id="new-arrivals">
+    <h2 class="text-center mb-4" style="font-family: 'Playfair Display'; font-weight: bold;">New Arrivals</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        <!-- Necklace Card -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <img src="/images/necklace.jpg" class="card-img-top" alt="Elegant Gold Necklace">
+                <div class="card-body">
+                    <h5 class="card-title text-rose">Elegant Gold Necklace</h5>
+                    <p class="card-text text-muted small">Crafted gold necklace with a modern touch.</p>
+                    <button class="btn btn-outline-primary" onclick="openModal('necklace')">View Details</button>
+                </div>
+            </div>
+        </div>
+        <!-- Emerald Ring Card -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <img src="/images/emerald-ring.jpg" class="card-img-top" alt="Emerald Ring">
+                <div class="card-body">
+                    <h5 class="card-title text-rose">Emerald Ring</h5>
+                    <p class="card-text text-muted small">Timeless elegance with a vibrant emerald stone.</p>
+                    <button class="btn btn-outline-primary" onclick="openModal('emerald')">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pearl Earrings Card -->
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <img src="/images/pearl-earrings.jpg" class="card-img-top" alt="Pearl Drop Earrings">
+                <div class="card-body">
+                    <h5 class="card-title text-rose">Pearl Drop Earrings</h5>
+                    <p class="card-text text-muted small">Classic pearls that never go out of style.</p>
+                    <button class="btn btn-outline-primary" onclick="openModal('pearl')">View Details</button>
+                </div>
+            </div>
+        </div>
+        </div>
+        </section>
+
+
+<!-- Product Modals -->
+<!-- Necklace Modal -->
+<div id="necklace-modal" class="product-modal" style="display:none;">
+    <div class="modal-content animate">
+        <span class="close" onclick="closeModal('necklace')">&times;</span>
+        <img src="/images/necklace.jpg" class="img-fluid mb-3" alt="Necklace">
+        <h3>Elegant Gold Necklace</h3>
+        <p class="text-muted">This timeless piece complements any outfit with grace and sparkle.</p>
+        <p><strong>Price:</strong> $120.00</p>
+        <label>Quantity:</label>
+        <input type="number" value="1" min="1" class="form-control w-25 d-inline-block mb-3">
+        <!-- ADD TO CART FORM -->
+        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-3 add-to-cart-form d-flex align-items-center gap-2">
+            
+            <input type="hidden" name="productId" value="1" />
+            <input type="number" name="quantity" value="1" min="1" class="form-control" style="width:70px;" />
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+            </button>
+        </form>
+
+
+        <hr>
+        <h5>Related Products</h5>
+        <div class="row mt-3 overflow-auto flex-nowrap">
+            <div class="col text-center">
+                <img src="/images/emerald-ring.jpg" class="img-thumbnail" style="width:100px;">
+                <p class="small mt-1">Emerald Ring</p>
+                <button class="btn btn-sm btn-outline-primary" onclick="openModal('emerald')">View</button>
+            </div>
+            <div class="col text-center">
+                <img src="/images/pearl-earrings.jpg" class="img-thumbnail" style="width:100px;">
+                <p class="small mt-1">Pearl Earrings</p>
+                <button class="btn btn-sm btn-outline-primary" onclick="openModal('pearl')">View</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Emerald Ring Modal -->
+<div id="emerald-modal" class="product-modal" style="display:none;">
+    <div class="modal-content animate">
+        <span class="close" onclick="closeModal('emerald')">&times;</span>
+        <img src="/images/emerald-ring.jpg" class="img-fluid mb-3" alt="Emerald Ring">
+        <h3>Emerald Ring</h3>
+        <p class="text-muted">A vibrant green gemstone set in an elegant band.</p>
+        <p><strong>Price:</strong> $85.00</p>
+        <label>Quantity:</label>
+        <input type="number" value="1" min="1" class="form-control w-25 d-inline-block mb-3">
+        <div class="d-flex align-items-center gap-2 mt-3">
+            <input type="number" value="1" min="1" class="form-control quantity-input" style="width:70px;" />
+            <!-- For Emerald Ring modal -->
+            <button type="button" class="btn btn-primary"
+                    onclick="addToCart(2, 'Emerald Ring', this.previousElementSibling.value)">
+                <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+            </button>
+
+        </div>
+
+
+        <hr>
+        <h5>Related Products</h5>
+        <div class="row mt-3 overflow-auto flex-nowrap">
+            <div class="col text-center">
+                <img src="/images/necklace.jpg" class="img-thumbnail" style="width:100px;">
+                <p class="small mt-1">Gold Necklace</p>
+                <button class="btn btn-sm btn-outline-primary" onclick="openModal('necklace')">View</button>
+            </div>
+            <div class="col text-center">
+                <img src="/images/pearl-earrings.jpg" class="img-thumbnail" style="width:100px;">
+                <p class="small mt-1">Pearl Earrings</p>
+                <button class="btn btn-sm btn-outline-primary" onclick="openModal('pearl')">View</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pearl Earrings Modal -->
+<div id="pearl-modal" class="product-modal" style="display:none;">
+    <div class="modal-content animate">
+        <span class="close" onclick="closeModal('pearl')">&times;</span>
+        <img src="/images/pearl-earrings.jpg" class="img-fluid mb-3" alt="Pearl Earrings">
+        <h3>Pearl Drop Earrings</h3>
+        <p class="text-muted">Classic pearls that never go out of style.</p>
+        <p><strong>Price:</strong> $60.00</p>
+        <label>Quantity:</label>
+
+        <!-- ADD TO CART FORM -->
+        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-3 add-to-cart-form d-flex align-items-center gap-2">
+            <!-- Use the actual product ID -->
+            <input type="hidden" name="productId" value="3" />
+            <input type="number" name="quantity" value="1" min="1" class="form-control" style="width:70px;" />
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+            </button>
+        </form>
+    </div>
+
+        <hr>
+        <h5>Related Products</h5>
+        <div class="row mt-3 overflow-auto flex-nowrap">
+            <div class="col text-center">
+                <img src="/images/necklace.jpg" class="img-thumbnail" style="width:100px;">
+                <p class="small mt-1">Gold Necklace</p>
+                <button class="btn btn-sm btn-outline-primary" onclick="openModal('necklace')">View</button>
+            </div>
+            <div class="col text-center">
+                <img src="/images/emerald-ring.jpg" class="img-thumbnail" style="width:100px;">
+                <p class="small mt-1">Emerald Ring</p>
+                <button class="btn btn-sm btn-outline-primary" onclick="openModal('emerald')">View</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Open product modal
+    function openModal(product) {
+        document.getElementById(product + '-modal').style.display = 'block';
+    }
+
+    // Close product modal
+    function closeModal(product) {
+        document.getElementById(product + '-modal').style.display = 'none';
+    }
+
+    // Add product to cart using AJAX
+    function addToCart(productId, productName, quantity) {
+        quantity = parseInt(quantity);
+        if (quantity < 1) quantity = 1;
+
+        $.ajax({
+            url: '/Cart/AddToCart', // Your controller/action
+            type: 'POST',
+            data: { productId: productId, quantity: quantity },
+            success: function () {
+                // Reload cart summary in navbar dynamically
+                $("#cart-summary").load("/Home/CartSummary");
+                // Optional: show success message
+                alert(`${productName} (x${quantity}) added to cart!`);
+            },
+            error: function () {
+                alert("Failed to add item to cart.");
+            }
+        });
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function (event) {
+        document.querySelectorAll('.product-modal').forEach(function (modal) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    };
+</script>
+
+<br />
+
+
+
+<section class="promo-section">
+    <div class="promo-text animate-left">
+        <img src="/images/bracelet-icon.png" alt="Bracelet Icon" class="promo-icon" />
+        <h2>Elegant Bracelets for You</h2>
+        <p>Discover our elegant and timeless bracelet collection</p>
+        <a href="/bracelets" class="promo-btn">- Discover the Collection</a>
+    </div>
+    <div class="promo-image animate-right">
+        <img src="/images/bracelet-bg.jpg" alt="Bracelet Background" />
+    </div>
+</section>
+
+<br />
+<!--Testimonials-->
+
+<section class="testimonials-section">
+    <h2 class="section-title">What Our Customers Say</h2>
+    <div class="testimonials-container">
+
+        <!-- Testimonial Card 1 -->
+        <div class="testimonial-card">
+            <p class="testimonial-text">“Elysian made my engagement so special. The quality and design were beyond my expectations!”</p>
+            <div class="testimonial-author">
+              
+                <div>
+                    <h5>Sarah Malik</h5>
+                    <span>Blogger & Bride-to-be</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial Card 2 -->
+        <div class="testimonial-card">
+            <p class="testimonial-text">“The emerald ring I ordered was stunning. Delivery was quick and service was amazing.”</p>
+            <div class="testimonial-author">
+              
+                <div>
+                    <h5>Fatima Rahman</h5>
+                    <span>Stylist</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial Card 3 -->
+        <div class="testimonial-card">
+            <p class="testimonial-text">“I always find unique, beautiful pieces here. It’s my go-to store for gifts and accessories.”</p>
+            <div class="testimonial-author">
+              
+                <div>
+                    <h5>Amna Tariq</h5>
+                    <span>Entrepreneur</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<br />
+
+            <!--Featured product-->
+
+<section class="featured-products py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold">Featured Products</h2>
+        <div class="row g-4 justify-content-center">
+
+            <!-- Diamond Ring Card -->
+            <div class="col-md-5">
+                <div class="card featured-card animate__animated animate__fadeInUp shadow">
+                    <img src="/images/diamond-ring.jpg" class="card-img-top" alt="Diamond Ring">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Diamond Ring</h4>
+                        <p class="text-muted mb-1">Category: Rings</p>
+                        <p class="fw-bold">$299.99</p>
+                        <button class="btn btn-outline-dark" onclick="openModal('diamond')">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Necklace Card -->
+            <div class="col-md-5">
+                <div class="card featured-card animate__animated animate__fadeInUp shadow">
+                    <img src="/images/diamond-necklace.jpg" class="card-img-top" alt="Necklace">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Diamond Necklace</h4>
+                        <p class="text-muted mb-1">Category: Necklaces</p>
+                        <p class="fw-bold">$120.00</p>
+                        <button class="btn btn-outline-dark" onclick="openModal('necklace')">View Details</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- Diamond Ring Modal -->
+<div id="diamond-modal" class="product-modal" style="display:none;">
+    <div class="modal-content animate">
+        <span class="close" onclick="closeModal('diamond')">&times;</span>
+        <img src="/images/diamond-ring.jpg" class="img-fluid mb-3" alt="Diamond Ring">
+        <h3>Diamond Ring</h3>
+        <p class="text-muted">Exquisitely crafted with pure elegance and shine.</p>
+        <p><strong>Price:</strong> $299.99</p>
+        <label>Quantity:</label>
+
+        <!-- ADD TO CART FORM -->
+        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-3 add-to-cart-form d-flex align-items-center gap-2">
+            <!-- Replace with actual product ID from your DB -->
+            <input type="hidden" name="productId" value="1" />
+            <input type="number" name="quantity" value="1" min="1" class="form-control" style="width:70px;" />
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Diamond Necklace Modal -->
+<div id="necklace-modal" class="product-modal" style="display: none;">
+    <div class="modal-content animate">
+        <span class="close" onclick="closeModal('necklace')">&times;</span>
+        <img src="/images/diamond-necklace.jpg" class="img-fluid mb-3 rounded" alt="Diamond Necklace">
+        <h3 class="fw-bold">Elegant Gold Necklace</h3>
+        <p class="text-muted">A graceful and timeless piece featuring pure craftsmanship, perfect for both everyday wear and special occasions.</p>
+        <p><strong>Category:</strong> Necklaces</p>
+        <p><strong>Price:</strong> $120.00</p>
+
+        <!-- ADD TO CART FORM -->
+        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-3 add-to-cart-form d-flex align-items-center gap-2">
+            <!-- Replace with actual product ID for Diamond Necklace -->
+            <input type="hidden" name="productId" value="2" />
+            <input type="number" name="quantity" value="1" min="1" class="form-control" style="width:70px;" />
+            <button type="submit" class="btn btn-dark">
+                <i class="fa-solid fa-cart-plus me-1"></i> Add to Cart
+            </button>
+        </form>
+    </div>
+</div>
+
+<br />
+
+<!--Precious metal-->
+
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4 fw-bold">Precious Metals</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            <!-- 24K Solid Gold -->
+            <div class="col">
+                <div class="card h-100 text-center border-0 shadow-sm">
+                    <img src="/images/24k-gold.jpg" class="card-img-top" alt="24K Solid Gold">
+                    <div class="card-body">
+                        <h5 class="card-title text-gold fw-bold">24K Solid Gold</h5>
+                        <p class="card-text text-muted small">The purest form of gold, unmatched in luxury and brilliance.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sterling Silver -->
+            <div class="col">
+                <div class="card h-100 text-center border-0 shadow-sm">
+                    <img src="/images/sterling-silver.jpg" class="card-img-top" alt="Sterling Silver">
+                    <div class="card-body">
+                        <h5 class="card-title text-secondary fw-bold">Sterling Silver</h5>
+                        <p class="card-text text-muted small">Durable and elegant, perfect for everyday sophistication.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pure Diamond -->
+            <div class="col">
+                <div class="card h-100 text-center border-0 shadow-sm">
+                    <img src="/images/pure-diamond.jpg" class="card-img-top" alt="Pure Diamond">
+                    <div class="card-body">
+                        <h5 class="card-title text-dark fw-bold">Pure Diamond</h5>
+                        <p class="card-text text-muted small">The ultimate symbol of luxury, brilliance, and timeless beauty.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<script>
+    AOS.init();
+</script>
+
+<br />
+
+<section class="promo-section">
+    <div class="promo-text animate-left">
+        <img src="/images/ring-icon.png" alt="Ring Icon" class="promo-icon" />
+        <h2>Elegant Rings for You</h2>
+        <p>Discover our elegant and timeless ring collection</p>
+        <a href="/Shop?category=ring" class="promo-btn">- Discover the Collection</a>
+
+    </div>
+    <div class="promo-image animate-right">
+        <img src="/images/ring-bg.jpg" alt="ring Background" />
+    </div>
+</section>

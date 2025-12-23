@@ -1,0 +1,412 @@
+﻿@model Elysian.Models.Product
+
+@{
+    ViewData["Title"] = "Create Product";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12">
+            <div class="card card-creative shadow-lg border-0">
+                <!-- Card Header with Gradient -->
+                <div class="card-header py-4 px-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px 15px 0 0;">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h2 class="text-white mb-1"><i class="fas fa-gem me-3"></i>Create New Product</h2>
+                            <p class="text-white-50 mb-0">Add a new jewelry item to your collection</p>
+                        </div>
+                        <a asp-action="Products" class="btn btn-light btn-sm rounded-pill px-4">
+                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body p-5" style="background-color: #f8f9fa;">
+                    <form asp-action="CreateProduct" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <!-- Success/Error Messages -->
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show rounded-pill shadow-sm" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show rounded-pill shadow-sm" role="alert">
+                                <i class="fas fa-exclamation-circle me-2"></i>@TempData["ErrorMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <div class="row g-4">
+                            <!-- Left Column - Product Details -->
+                            <div class="col-lg-8">
+                                <div class="card shadow-sm border-0 mb-4">
+                                    <div class="card-header bg-white py-3">
+                                        <h5 class="mb-0 text-primary"><i class="fas fa-info-circle me-2"></i>Product Details</h5>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <!-- Product Name -->
+                                        <div class="form-floating mb-4">
+                                            <input asp-for="Name" class="form-control form-control-lg" id="productName" placeholder=" " />
+                                            <label for="productName" class="form-label">
+                                                <i class="fas fa-tag me-2 text-primary"></i>Product Name *
+                                            </label>
+                                            <span asp-validation-for="Name" class="text-danger small mt-1"></span>
+                                        </div>
+
+                                        <!-- Description -->
+                                        <div class="mb-4">
+                                            <label asp-for="Description" class="form-label fw-bold mb-2">
+                                                <i class="fas fa-align-left me-2 text-primary"></i>Description
+                                            </label>
+                                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Describe your product..." style="border-radius: 10px; border: 1px solid #dee2e6;"></textarea>
+                                            <span asp-validation-for="Description" class="text-danger small mt-1"></span>
+                                        </div>
+
+                                        <!-- Price & Category -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input asp-for="Price" type="number" step="0.01" class="form-control" id="productPrice" placeholder=" " />
+                                                    <label for="productPrice" class="form-label">
+                                                        <i class="fas fa-rupee-sign me-2 text-success"></i>Price *
+                                                    </label>
+                                                    <span asp-validation-for="Price" class="text-danger small mt-1"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input asp-for="Category" class="form-control" id="productCategory" placeholder=" " list="categoryList" />
+                                                    <label for="productCategory" class="form-label">
+                                                        <i class="fas fa-list me-2 text-warning"></i>Category
+                                                    </label>
+                                                    <datalist id="categoryList">
+                                                        <option value="Necklace">Necklace</option>
+                                                        <option value="Ring">Ring</option>
+                                                        <option value="Earrings">Earrings</option>
+                                                        <option value="Bracelet">Bracelet</option>
+                                                        <option value="Watch">Watch</option>
+                                                    </datalist>
+                                                    <span asp-validation-for="Category" class="text-danger small mt-1"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Material & Rating -->
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input asp-for="Material" class="form-control" id="productMaterial" placeholder=" " list="materialList" />
+                                                    <label for="productMaterial" class="form-label">
+                                                        <i class="fas fa-gem me-2 text-info"></i>Material
+                                                    </label>
+                                                    <datalist id="materialList">
+                                                        <option value="Gold">Gold</option>
+                                                        <option value="Silver">Silver</option>
+                                                        <option value="Diamond">Diamond</option>
+                                                        <option value="Platinum">Platinum</option>
+                                                        <option value="Pearl">Pearl</option>
+                                                    </datalist>
+                                                    <span asp-validation-for="Material" class="text-danger small mt-1"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input asp-for="Rating" type="number" step="0.1" min="0" max="5" class="form-control" id="productRating" placeholder=" " />
+                                                    <label for="productRating" class="form-label">
+                                                        <i class="fas fa-star me-2 text-warning"></i>Rating (0-5)
+                                                    </label>
+                                                    <span asp-validation-for="Rating" class="text-danger small mt-1"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tags -->
+                                        <div class="mb-4">
+                                            <label asp-for="Tags" class="form-label fw-bold mb-2">
+                                                <i class="fas fa-tags me-2 text-primary"></i>Tags (comma separated)
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text bg-white border-end-0">
+                                                    <i class="fas fa-hashtag text-muted"></i>
+                                                </span>
+                                                <input asp-for="Tags" class="form-control border-start-0" placeholder="gold, necklace, elegant, wedding" />
+                                            </div>
+                                            <small class="text-muted mt-1 d-block">Separate tags with commas</small>
+                                            <span asp-validation-for="Tags" class="text-danger small mt-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column - Image & Settings -->
+                            <div class="col-lg-4">
+                                <!-- Image Upload Card -->
+                                <div class="card shadow-sm border-0 mb-4">
+                                    <div class="card-header bg-white py-3">
+                                        <h5 class="mb-0 text-primary"><i class="fas fa-image me-2"></i>Product Image</h5>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <!-- Image Preview -->
+                                        <div class="text-center mb-4" id="imagePreview">
+                                            <div class="image-upload-placeholder rounded-3 border-dashed p-5 mb-3" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                                <p class="text-muted mb-0">No image selected</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- File Input -->
+                                        <div class="mb-3">
+                                            <label asp-for="ImageFile" class="form-label fw-bold mb-2">
+                                                <i class="fas fa-upload me-2 text-primary"></i>Upload Image
+                                            </label>
+                                            <div class="input-group">
+                                                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" id="imageUpload" />
+                                                <button class="btn btn-outline-secondary" type="button" id="clearImage">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                            <small class="text-muted mt-1 d-block">
+                                                <i class="fas fa-info-circle me-1"></i>Recommended: 500x500px, JPG/PNG format
+                                            </small>
+                                            <span asp-validation-for="ImageFile" class="text-danger small mt-1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Settings Card -->
+                                <div class="card shadow-sm border-0 mb-4">
+                                    <div class="card-header bg-white py-3">
+                                        <h5 class="mb-0 text-primary"><i class="fas fa-cog me-2"></i>Product Settings</h5>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <!-- Featured Product -->
+                                        <div class="form-check form-switch mb-4 p-3 rounded-3" style="background-color: #f8f9fa;">
+                                            <input asp-for="IsFeatured" class="form-check-input" type="checkbox" id="featuredSwitch" style="width: 3em; height: 1.5em;">
+                                            <label asp-for="IsFeatured" class="form-check-label fw-bold ms-3" for="featuredSwitch">
+                                                <i class="fas fa-crown me-2 text-warning"></i>Featured Product
+                                            </label>
+                                            <p class="text-muted small mt-1 mb-0 ms-5">Show this product on homepage</p>
+                                        </div>
+
+                                        <!-- New Arrival -->
+                                        <div class="form-check form-switch p-3 rounded-3" style="background-color: #f8f9fa;">
+                                            <input asp-for="IsNewArrival" class="form-check-input" type="checkbox" id="newArrivalSwitch" style="width: 3em; height: 1.5em;">
+                                            <label asp-for="IsNewArrival" class="form-check-label fw-bold ms-3" for="newArrivalSwitch">
+                                                <i class="fas fa-fire me-2 text-danger"></i>New Arrival
+                                            </label>
+                                            <p class="text-muted small mt-1 mb-0 ms-5">Mark as new product</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-grid gap-3">
+                                    <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-lg py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                                        <i class="fas fa-plus-circle me-2"></i>Create Product
+                                    </button>
+                                    <a asp-action="Products" class="btn btn-outline-secondary btn-lg rounded-pill py-3">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .card-creative {
+            border-radius: 20px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #667eea;
+                box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+                transform: translateY(-2px);
+            }
+
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .border-dashed {
+            border: 2px dashed #c3cfe2;
+            cursor: pointer;
+        }
+
+            .border-dashed:hover {
+                border-color: #667eea;
+                background: linear-gradient(135deg, #f0f4ff 0%, #e6e9ff 100%);
+            }
+
+        .form-switch .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+
+        .form-check-input:checked {
+            background-color: #667eea;
+            border-color: #667eea;
+        }
+
+        .alert {
+            border-radius: 50px;
+            border: none;
+        }
+
+        .btn-primary {
+            transition: all 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            }
+
+        .btn-outline-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group-text {
+            border-radius: 10px 0 0 10px;
+            background-color: #fff;
+            border-right: none;
+        }
+
+        .form-control:disabled, .form-control[readonly] {
+            background-color: #f8f9fa;
+        }
+
+        /* Custom scrollbar */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+            textarea::-webkit-scrollbar-thumb:hover {
+                background: #a8a8a8;
+            }
+
+        /* Floating label animation */
+        .form-floating > label {
+            transition: all 0.2s ease-in-out;
+            padding-left: 2.5rem;
+        }
+
+        .form-floating > .form-control ~ label::before {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* Hover effects */
+        .card:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+
+        /* Image preview styles */
+        #imagePreview img {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+            #imagePreview img:hover {
+                transform: scale(1.05);
+            }
+    </style>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            // Image preview functionality
+            $('#imageUpload').change(function () {
+                if (this.files && this.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imagePreview').html(`
+                                    <div class="position-relative">
+                                        <img src="${e.target.result}" class="img-fluid rounded-3 shadow" style="max-height: 300px;" />
+                                        <button type="button" class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2 rounded-circle" onclick="$('#imagePreview').html('<div class=\"image-upload-placeholder rounded-3 border-dashed p-5 mb-3\" style=\"background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);\"><i class=\"fas fa-cloud-upload-alt fa-3x text-muted mb-3\"></i><p class=\"text-muted mb-0\">No image selected</p></div>'); $('#imageUpload').val(\'\');">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                `);
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            // Clear image button
+            $('#clearImage').click(function () {
+                $('#imagePreview').html('<div class="image-upload-placeholder rounded-3 border-dashed p-5 mb-3" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);"><i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i><p class="text-muted mb-0">No image selected</p></div>');
+                $('#imageUpload').val('');
+            });
+
+            // Form validation styling
+            $('form').on('submit', function () {
+                $(this).addClass('was-validated');
+            });
+
+            // Add floating effect to buttons on hover
+            $('.btn').hover(
+                function () {
+                    $(this).css('transform', 'translateY(-3px)');
+                },
+                function () {
+                    $(this).css('transform', 'translateY(0)');
+                }
+            );
+
+            // Auto-format tags input
+            $('#Tags').on('blur', function () {
+                var tags = $(this).val();
+                if (tags) {
+                    // Remove extra spaces and ensure proper comma separation
+                    var formattedTags = tags.split(',')
+                        .map(tag => tag.trim())
+                        .filter(tag => tag.length > 0)
+                        .join(', ');
+                    $(this).val(formattedTags);
+                }
+            });
+        });
+    </script>
+}

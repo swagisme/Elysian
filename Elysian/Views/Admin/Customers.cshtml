@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Elysian.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Customers";
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-content">
+    <h1>Customers</h1>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FullName</td>
+                    <td>@user.Email</td>
+                    <td>@user.PhoneNumber</td>
+                    <td>
+                        <form method="post"
+                              asp-action="DeleteCustomer"
+                              asp-controller="Admin"
+                              asp-route-id="@user.Id"
+                              onsubmit="return confirm('Are you sure?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

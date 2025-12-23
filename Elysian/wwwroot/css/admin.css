@@ -1,0 +1,139 @@
+﻿/* Reset & body */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+/* Wrapper */
+.admin-wrapper {
+    display: flex;
+}
+
+/* Sidebar */
+.admin-sidebar {
+    width: 220px;
+    background: #222;
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar Header / Navbar Title */
+.sidebar-header {
+    text-align: left;
+    padding: 30px 20px 20px 20px;
+    border-bottom: 1px solid #444;
+}
+
+    .sidebar-header h2 {
+        font-size: 20px;
+        margin: 0;
+        white-space: nowrap; /* prevent text cut */
+    }
+
+/* Sidebar Menu */
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    flex-grow: 1;
+}
+
+    .sidebar-menu li {
+        margin: 10px 0;
+    }
+
+    .sidebar-menu a {
+        color: #fff;
+        text-decoration: none;
+        padding: 12px 20px;
+        display: block;
+        font-weight: 500;
+        transition: background 0.2s;
+    }
+
+        .sidebar-menu a:hover {
+            background: #444;
+            border-radius: 4px;
+        }
+
+/* Main Content */
+.admin-content {
+    margin-left: 220px; /* Sidebar width */
+    padding: 30px;
+    min-height: 100vh;
+}
+
+/* Dashboard Cards */
+.admin-cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 200px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+    .card a {
+        display: inline-block;
+        margin-top: 10px;
+        color: black;
+        font-weight: bold;
+    }
+
+
+
+
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+    .admin-table th, .admin-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .admin-table th {
+        background: #222;
+        color: #fff;
+    }
+
+    .admin-table tr:nth-child(even) {
+        background: #f9f9f9;
+    }
+
+.btn {
+    padding: 5px 12px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+    .btn:hover {
+        background: #333;
+    }
+
+.btn-danger {
+    background: #c0392b;
+}
+
+    .btn-danger:hover {
+        background: #e74c3c;
+    }

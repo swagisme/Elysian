@@ -1,0 +1,121 @@
+﻿@model Elysian.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-dark text-white rounded-4 rounded-bottom-0 py-3">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h4 class="mb-0">Order #@Model.Id</h4>
+                    <small class="text-light">Placed on @Model.OrderDate.ToString("f")</small>
+                </div>
+                <div class="col-md-6 text-end">
+                    <span class="badge
+                        @(Model.Status == "Pending" ? "bg-warning text-dark" :
+                          Model.Status == "Processing" ? "bg-info text-white" :
+                          Model.Status == "Shipped" ? "bg-primary text-white" :
+                          Model.Status == "Delivered" ? "bg-success text-white" :
+                          Model.Status == "Cancelled" ? "bg-danger text-white" : "bg-secondary text-white")
+                        fs-6">
+                        @Model.Status
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            <!-- Order Information -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5 class="fw-bold mb-3">👤 Customer Information</h5>
+                    <p><strong>Name:</strong> @Model.FullName</p>
+                    <p><strong>Email:</strong> @Model.Email</p>
+                    <p><strong>Phone:</strong> @Model.Phone</p>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="fw-bold mb-3">🚚 Shipping Information</h5>
+                    <p><strong>Address:</strong> @Model.Address</p>
+                    <p><strong>Tracking Number:</strong> <code>@Model.TrackingNumber</code></p>
+                    <p><strong>Order Date:</strong> @Model.OrderDate.ToString("f")</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Order Items -->
+            <h5 class="fw-bold mb-3">🛍️ Order Items</h5>
+            <div class="table-responsive">
+                <table class="table table-borderless align-middle">
+                    <thead style="background: #f8f9fa;">
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr class="border-bottom">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="@item.Product.ImageUrl" alt="@item.Product.Name"
+                                             width="60" class="rounded-3 shadow-sm me-3">
+                                        <div>
+                                            <h6 class="mb-0 fw-semibold">@item.Product.Name</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="fw-semibold">Rs. @item.UnitPrice</td>
+                                <td>@item.Quantity</td>
+                                <td class="fw-bold text-rose">Rs. @(item.UnitPrice * item.Quantity)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <!-- Empty for alignment -->
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-light border-0">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-3">Order Summary</h5>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal:</span>
+                                <span>Rs. @Model.TotalAmount</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Shipping:</span>
+                                <span>FREE</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between fw-bold fs-5">
+                                <span>Total:</span>
+                                <span class="text-rose">Rs. @Model.TotalAmount</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer bg-transparent border-0 rounded-4 rounded-top-0 py-3">
+            <div class="d-flex justify-content-between">
+                <a asp-action="OrderHistory" class="btn btn-outline-dark rounded-pill px-4">
+                    ← Back to Order History
+                </a>
+                <a asp-controller="Shop" asp-action="Index" class="btn btn-dark rounded-pill px-4">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

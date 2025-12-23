@@ -1,0 +1,141 @@
+﻿@model Elysian.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmed";
+    var userName = !string.IsNullOrEmpty(Model.UserId) && Model.UserId != "Guest"
+        ? Model.FullName
+        : "Guest User";
+}
+
+<div class="container my-5 d-flex justify-content-center">
+    <div class="card shadow-lg border-0 rounded-4 p-5" style="max-width: 900px; background: #fffaf0;">
+
+
+
+        <!-- Success Icon + Personalized Heading -->
+        <div class="text-center mb-4">
+            <div class="rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                 style="width: 80px; height: 80px; background: rgba(222, 182, 75, 0.15);">
+                <i class="bi bi-check-circle-fill" style="font-size: 2.5rem; color: #DEB64B;"></i>
+            </div>
+            <h2 class="fw-bold mb-2" style="color:#333; font-family: 'Playfair Display', serif;">
+                Thank you, <span style="color:#DEB64B;">@userName</span>!
+            </h2>
+            <p class="lead text-muted">Your order has been placed successfully. We'll send you updates once it's processed.</p>
+        </div>
+
+        <!-- Order Summary -->
+        <hr class="my-4" style="border-top: 2px solid #DEB64B;" />
+
+        <h4 class="fw-semibold mb-3" style="color:#444; font-family: 'Playfair Display', serif;">
+            🛍️ Order Summary
+        </h4>
+
+        <div class="table-responsive">
+            <table class="table table-borderless align-middle">
+                <thead style="background: #f8f5ef; color:#444; font-weight:600;">
+                    <tr>
+                        <th>Image</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr class="border-bottom">
+                            <td>
+                                <img src="@item.Product.ImageUrl" alt="@item.Product.Name" width="70" class="rounded-3 shadow-sm" />
+                            </td>
+                            <td class="fw-semibold">@item.Product.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>Rs. @item.Product.Price</td>
+                            <td class="fw-bold text-dark">Rs. @(item.Product.Price * item.Quantity)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Order Details - Final Version -->
+        <div class="row mt-4 text-start">
+            <div class="col-md-6">
+                <p><strong>👤 Customer Name:</strong> @Model.FullName</p>
+                <p><strong>📧 Email:</strong> @Model.Email</p>
+                <p><strong>📞 Phone:</strong> @Model.Phone</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>🏠 Delivery Address:</strong> @Model.Address</p>
+                <p><strong>📅 Order Date:</strong> @Model.OrderDate.ToString("f")</p>
+                <p>
+                    <strong>📊 Status:</strong>
+                    <span style="background-color: #ffc107; color: #000; padding: 4px 12px; border-radius: 12px; font-weight: bold; font-size: 0.875rem;">
+                        @Model.Status
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Total -->
+        <div class="text-end mt-4">
+            <h4 style="color:#222; font-family: 'Playfair Display', serif;">
+                Total:
+                <span class="fw-bold" style="color:#DEB64B;">
+                    Rs. @Model.TotalAmount
+                </span>
+            </h4>
+        </div>
+
+        <!-- Tracking Number - Prominent Display -->
+        <div class="card border-warning mt-4 mb-4">
+            <div class="card-body py-4 text-center">
+                <h4 class="fw-bold text-dark mb-2">📬 Your Tracking Number</h4>
+                <div class="tracking-number display-6 fw-bold text-warning mb-2">
+                    @Model.TrackingNumber
+                </div>
+                <p class="text-muted mb-0">
+                    Use this number to track your order status. We'll also send updates to @Model.Email
+                </p>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+            <a asp-controller="Shop" asp-action="Index"
+               class="btn btn-lg px-5 py-2 rounded-pill fw-semibold"
+               style="background:#DEB64B; color:#fff; letter-spacing:0.5px;">
+                🏠 Continue Shopping
+            </a>
+
+            @if (User.Identity.IsAuthenticated && Model.UserId != "Guest")
+            {
+                <a asp-controller="Order" asp-action="OrderHistory"
+                   class="btn btn-outline-dark btn-lg rounded-pill py-2 px-4 fw-semibold">
+                    📋 View Order History
+                </a>
+            }
+        </div>
+
+        <!-- Help Section -->
+        <div class="mt-4 pt-3 border-top text-center">
+            <p class="text-muted small">
+                Need help? <a href="/contact" class="text-warning fw-semibold">Contact our support team</a>
+                and mention your tracking number: <strong>@Model.TrackingNumber</strong>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .tracking-number {
+        font-family: 'Courier New', monospace;
+        background: #fff3cd;
+        padding: 15px 30px;
+        border-radius: 15px;
+        border: 2px dashed #ffc107;
+        display: inline-block;
+        letter-spacing: 2px;
+    }
+</style>

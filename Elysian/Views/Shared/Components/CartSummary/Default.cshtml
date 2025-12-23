@@ -1,0 +1,15 @@
+﻿@model Elysian.Models.Cart
+
+<a asp-controller="Cart" asp-action="Index" class="position-relative text-dark nav-link">
+    <i class="fa-solid fa-bag-shopping fs-5"></i>
+
+    <!-- Item Count Badge -->
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark" style="font-size: 0.7rem;">
+        @(Model?.Items?.Count() ?? 0)
+    </span>
+
+    <!-- Total Price -->
+    <span class="ms-2 fw-semibold text-muted">
+        $@((Model?.Items?.Sum(i => (i.Product?.Price ?? 0) * i.Quantity) ?? 0).ToString("0.00"))
+    </span>
+</a>

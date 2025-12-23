@@ -1,0 +1,109 @@
+﻿@model Elysian.Models.Cart
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<div class="container my-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold display-5 text-dark">
+            🛒 Your <span class="text-rose">Shopping Cart</span>
+        </h2>
+        <p class="text-muted">Review your selected items before checkout.</p>
+    </div>
+
+    @if (Model == null || !Model.Items.Any())
+    {
+        <div class="alert alert-light border shadow-sm p-4 text-center rounded-3">
+            <h5 class="mb-3">Your cart is empty.</h5>
+            <a asp-controller="Shop" asp-action="Index" class="btn btn-dark px-4 py-2">
+                Continue Shopping
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-4">
+                <table class="table align-middle">
+                    <thead class="table-dark rounded-top">
+                        <tr>
+                            <th>Image</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th style="width:170px;">Quantity</th>
+                            <th>Subtotal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr class="border-bottom">
+                                <td>
+                                    <img src="@item.Product.ImageUrl" alt="@item.Product.Name"
+                                         width="80" class="rounded shadow-sm" />
+                                </td>
+                                <td class="fw-semibold">@item.Product.Name</td>
+                                <td class="text-rose fw-bold">Rs. @item.Product.Price</td>
+                                <td>
+                                    <form asp-action="UpdateQuantity" method="post"
+                                          class="d-flex align-items-center justify-content-center">
+                                        <input type="hidden" name="itemId" value="@item.Id" />
+
+                                        <button type="submit" name="change" value="-1"
+                                                class="btn btn-sm btn-outline-dark rounded-circle me-1"
+                                                style="width:32px; height:32px;" @(item.Quantity == 1 ? "disabled" : "")>
+                                            -
+                                        </button>
+
+                                        <input type="text" value="@item.Quantity"
+                                               class="form-control text-center border-0 fw-bold"
+                                               style="width:50px; background: #f8f9fa;" readonly />
+
+                                        <button type="submit" name="change" value="1"
+                                                class="btn btn-sm btn-outline-dark rounded-circle ms-1"
+                                                style="width:32px; height:32px;">
+                                            +
+                                        </button>
+                                    </form>
+                                </td>
+                                <td class="fw-semibold">Rs. @(item.Product.Price * item.Quantity)</td>
+                                <td>
+                                    <form asp-action="RemoveFromCart" method="post"
+                                          onsubmit="return confirm('Remove this item?');">
+                                        <input type="hidden" name="itemId" value="@item.Id" />
+                                        <button type="submit" class="btn btn-sm btn-danger rounded-pill px-3">
+                                            Remove
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <a asp-controller="Shop" asp-action="Index"
+                       class="btn btn-outline-dark rounded-pill px-4 py-2">
+                        ← Continue Shopping
+                    </a>
+
+                    <div class="text-end">
+                        <h4 class="fw-bold mb-3">
+                            Total:
+                            <span class="text-rose">
+                                Rs. @Model.Items.Sum(i => i.Product.Price * i.Quantity)
+                            </span>
+                        </h4>
+
+                        <!-- Updated: Redirect to OrderController Checkout (GET method) -->
+                        <a asp-controller="Order" asp-action="Checkout"
+                           class="btn btn-dark btn-lg px-5 py-2 rounded-pill shadow-sm">
+                            Proceed to Checkout →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

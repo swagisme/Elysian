@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Elysian Admin Panel</title>
+    <link rel="stylesheet" href="~/css/admin.css" />
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    @RenderSection("Scripts", required: false)
+
+    <div class="admin-wrapper">
+
+        <!-- Sidebar + Navbar inside -->
+        <div class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2>Elysian Admin</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="/Admin">Dashboard</a></li>
+                <li><a href="/Admin/Products">Products</a></li>
+                <li><a href="/Admin/Orders">Orders</a></li>
+                <li><a href="/Admin/Customers">Customers</a></li>
+                <li><a href="/Account/Logout">Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-content">
+            @RenderBody()
+        </div>
+
+    </div>
+
+</body>
+</html>

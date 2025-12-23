@@ -1,0 +1,536 @@
+﻿@model Elysian.Models.Order
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "_AdminLayout";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-xl-10 col-lg-12">
+            <!-- Order Header -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h1 class="h3 mb-1">
+                                <i class="fas fa-receipt text-primary me-2"></i>Order Details
+                            </h1>
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="badge @GetStatusBadgeClass(Model.Status) rounded-pill py-2 px-3">
+                                    <i class="fas fa-circle me-1" style="font-size: 0.6em;"></i> @Model.Status
+                                </span>
+                                <span class="text-muted">
+                                    <i class="fas fa-hashtag me-1"></i>#@Model.Id
+                                </span>
+                                <span class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>@Model.OrderDate.ToString("MMM dd, yyyy")
+                                </span>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <a asp-action="Orders" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Orders
+                            </a>
+                            <a asp-action="EditOrder" asp-route-id="@Model.Id" class="btn btn-primary">
+                                <i class="fas fa-edit me-2"></i>Edit Order
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body text-center py-3">
+                                    <h6 class="text-muted mb-1">Total Amount</h6>
+                                    <h4 class="text-success fw-bold mb-0">Rs. @Model.TotalAmount.ToString("N2")</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body text-center py-3">
+                                    <h6 class="text-muted mb-1">Items</h6>
+                                    <h4 class="text-primary fw-bold mb-0">@Model.Items.Sum(i => i.Quantity)</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body text-center py-3">
+                                    <h6 class="text-muted mb-1">Tracking Number</h6>
+                                    <h6 class="fw-bold mb-0">@(Model.TrackingNumber ?? "N/A")</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body text-center py-3">
+                                    <h6 class="text-muted mb-1">Order Date</h6>
+                                    <h6 class="fw-bold mb-0">@Model.OrderDate.ToString("MMM dd, yyyy hh:mm tt")</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Left Column - Customer & Items -->
+                <div class="col-lg-8">
+                    <!-- Customer Information -->
+                    <div class="card shadow border-0 mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user-circle text-primary me-2"></i>Customer Information
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="text-muted small mb-1">Full Name</label>
+                                        <p class="fw-bold mb-0">@(Model.FullName ?? "Guest")</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="text-muted small mb-1">Email</label>
+                                        <p class="fw-bold mb-0">@Model.Email</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="text-muted small mb-1">Phone</label>
+                                        <p class="fw-bold mb-0">@Model.Phone</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="text-muted small mb-1">User ID</label>
+                                        <p class="fw-bold mb-0">@(Model.UserId ?? "Guest")</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label class="text-muted small mb-1">Shipping Address</label>
+                                        <p class="fw-bold mb-0">@Model.Address</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="card shadow border-0">
+                        <div class="card-header bg-white py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-boxes text-primary me-2"></i>Order Items
+                            </h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th class="border-0 ps-4">Product</th>
+                                            <th class="border-0 text-center">Price</th>
+                                            <th class="border-0 text-center">Quantity</th>
+                                            <th class="border-0 text-end pe-4">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Items)
+                                        {
+                                            <tr>
+                                                <td class="ps-4">
+                                                    <div class="d-flex align-items-center">
+                                                        @if (!string.IsNullOrEmpty(item.Product?.ImageUrl))
+                                                        {
+                                                            <img src="@item.Product.ImageUrl" 
+                                                                 class="rounded me-3" 
+                                                                 style="width: 50px; height: 50px; object-fit: cover;" 
+                                                                 alt="@item.Product.Name" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="rounded me-3 bg-light d-flex align-items-center justify-content-center" 
+                                                                 style="width: 50px; height: 50px;">
+                                                                <i class="fas fa-box text-muted"></i>
+                                                            </div>
+                                                        }
+                                                        <div>
+                                                            <h6 class="mb-0 fw-bold">@item.Product?.Name</h6>
+                                                            <small class="text-muted">ID: @item.ProductId</small>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="fw-bold">Rs. @item.UnitPrice.ToString("N2")</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-primary rounded-pill py-2 px-3">
+                                                        @item.Quantity
+                                                    </span>
+                                                </td>
+                                                <td class="text-end pe-4">
+                                                    <span class="fw-bold text-success">Rs. @((item.Quantity * item.UnitPrice).ToString("N2"))</span>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot class="bg-light">
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold border-0 ps-4">Subtotal:</td>
+                                            <td class="text-end fw-bold border-0 pe-4">Rs. @Model.Items.Sum(i => i.Quantity * i.UnitPrice).ToString("N2")</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold border-0 ps-4">Shipping:</td>
+                                            <td class="text-end fw-bold border-0 pe-4">Rs. 0.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-end fw-bold border-0 ps-4">Total:</td>
+                                            <td class="text-end fw-bold border-0 pe-4 text-success">Rs. @Model.TotalAmount.ToString("N2")</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Order Actions & History -->
+                <div class="col-lg-4">
+                    <!-- Status Update -->
+                    <div class="card shadow border-0 mb-4">
+                        <div class="card-header bg-white py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-sync-alt text-primary me-2"></i>Update Status
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <form method="post" 
+                                  asp-action="UpdateOrderStatus" 
+                                  asp-controller="Admin"
+                                  asp-route-id="@Model.Id"
+                                  class="needs-validation" 
+                                  novalidate>
+                                @Html.AntiForgeryToken()
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Change Status</label>
+                                    <select name="status" class="form-select">
+                                        <option value="Pending" selected="@(Model.Status == "Pending")">Pending</option>
+                                        <option value="Processing" selected="@(Model.Status == "Processing")">Processing</option>
+                                        <option value="Shipped" selected="@(Model.Status == "Shipped")">Shipped</option>
+                                        <option value="Delivered" selected="@(Model.Status == "Delivered")">Delivered</option>
+                                        <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Cancelled</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Notes (Optional)</label>
+                                    <textarea name="notes" class="form-control" rows="3" placeholder="Add notes about this status change..."></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-save me-2"></i>Update Status
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Order History -->
+                    @if (Model.History != null && Model.History.Any())
+                    {
+                        <div class="card shadow border-0">
+                            <div class="card-header bg-white py-3">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-history text-primary me-2"></i>Order History
+                                </h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="timeline">
+                                    @foreach (var history in Model.History.OrderByDescending(h => h.UpdatedAt))
+                                    {
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker @GetStatusBadgeClass(history.Status)"></div>
+                                            <div class="timeline-content">
+                                                <h6 class="fw-bold mb-1">@history.Status</h6>
+                                                <p class="text-muted small mb-1">@history.Notes</p>
+                                                <small class="text-muted">
+                                                    <i class="fas fa-clock me-1"></i>@history.UpdatedAt.ToString("MMM dd, yyyy hh:mm tt")
+                                                </small>
+                                                @if (!string.IsNullOrEmpty(history.UpdatedBy))
+                                                {
+                                                    <small class="text-muted d-block">
+                                                        <i class="fas fa-user me-1"></i>@history.UpdatedBy
+                                                    </small>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Quick Actions -->
+                    <div class="card shadow border-0 mt-4">
+                        <div class="card-header bg-white py-3">
+                            <h5 class="mb-0">
+                                <i class="fas fa-bolt text-primary me-2"></i>Quick Actions
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-grid gap-2">
+                                <a href="mailto:@Model.Email" class="btn btn-outline-primary">
+                                    <i class="fas fa-envelope me-2"></i>Email Customer
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary" onclick="printOrder()">
+                                    <i class="fas fa-print me-2"></i>Print Order
+                                </button>
+                                <button type="button" class="btn btn-outline-info" onclick="copyTracking()">
+                                    <i class="fas fa-copy me-2"></i>Copy Tracking
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Pending" => "bg-warning",
+            "Processing" => "bg-info",
+            "Shipped" => "bg-primary",
+            "Delivered" => "bg-success",
+            "Cancelled" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}
+
+@section Styles {
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            border-bottom: 2px solid #dee2e6;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(0, 123, 255, 0.05);
+        }
+
+        .badge {
+            font-weight: 500;
+        }
+
+        .btn-group .btn {
+            border-radius: 5px;
+        }
+
+        /* Timeline styling */
+        .timeline {
+            position: relative;
+            padding: 1rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            padding: 1rem;
+            border-left: 2px solid #e9ecef;
+            position: relative;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 3px solid #fff;
+        }
+
+        .timeline-content {
+            margin-left: 1.5rem;
+            flex: 1;
+        }
+
+        .timeline-item:last-child {
+            border-left-color: transparent;
+        }
+
+        .bg-warning {
+            background-color: #ffc107 !important;
+        }
+
+        .bg-info {
+            background-color: #17a2b8 !important;
+        }
+
+        .bg-primary {
+            background-color: #007bff !important;
+        }
+
+        .bg-success {
+            background-color: #28a745 !important;
+        }
+
+        .bg-danger {
+            background-color: #dc3545 !important;
+        }
+
+        .form-select, .form-control {
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+
+        .form-select:focus, .form-control:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn-outline-primary, .btn-outline-secondary, .btn-outline-info {
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-outline-info:hover {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @@media (max-width: 768px) {
+            .card-body {
+                padding: 1rem !important;
+            }
+            
+            .table-responsive {
+                font-size: 0.9rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .btn-group .btn {
+                width: 100%;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        function printOrder() {
+            window.print();
+        }
+
+        function copyTracking() {
+            var trackingNumber = '@Model.TrackingNumber';
+            if (trackingNumber && trackingNumber !== 'N/A') {
+                navigator.clipboard.writeText(trackingNumber).then(function() {
+                    alert('Tracking number copied to clipboard!');
+                });
+            } else {
+                alert('No tracking number available.');
+            }
+        }
+
+        // Form validation
+        $(document).ready(function() {
+            $('form').on('submit', function(e) {
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                $(this).addClass('was-validated');
+            });
+
+            // Status select change
+            $('select[name="status"]').change(function() {
+                var selectedStatus = $(this).val();
+                var statusBadge = $('.badge');
+                
+                // Update badge color
+                statusBadge.removeClass('bg-warning bg-info bg-primary bg-success bg-danger');
+                
+                switch(selectedStatus) {
+                    case 'Pending':
+                        statusBadge.addClass('bg-warning');
+                        break;
+                    case 'Processing':
+                        statusBadge.addClass('bg-info');
+                        break;
+                    case 'Shipped':
+                        statusBadge.addClass('bg-primary');
+                        break;
+                    case 'Delivered':
+                        statusBadge.addClass('bg-success');
+                        break;
+                    case 'Cancelled':
+                        statusBadge.addClass('bg-danger');
+                        break;
+                }
+                
+                statusBadge.find('i').next().text(selectedStatus);
+            });
+        });
+    </script>
+}

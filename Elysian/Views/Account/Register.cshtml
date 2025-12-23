@@ -1,0 +1,55 @@
+﻿@model RegisterViewModel
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="width: 420px; border-radius: 15px;">
+        <div class="text-center mb-4">
+            <i class="fa-solid fa-user-plus fa-3x text-success mb-2"></i>
+            <h3 class="fw-bold">Create Account</h3>
+            <p class="text-muted">Join us and start your journey</p>
+        </div>
+
+        <form asp-action="Register" method="post">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger mb-2"></div>
+
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label fw-semibold"></label>
+                <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label fw-semibold"></label>
+                <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label fw-semibold"></label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 fw-semibold shadow-sm">Sign Up</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <small class="text-muted">
+                Already have an account?
+                <a asp-controller="Account" asp-action="Login" class="fw-semibold">Login</a>
+            </small>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

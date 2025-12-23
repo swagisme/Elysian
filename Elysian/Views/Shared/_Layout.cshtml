@@ -1,0 +1,120 @@
+﻿@inject UserManager<Elysian.Models.ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Elysian</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <header class="py-3 px-4 d-flex justify-content-between align-items-center border-bottom">
+        <div class="d-flex gap-4 align-items-center">
+            <a asp-controller="Home" asp-action="Index" class="text-uppercase fw-semibold text-dark nav-link">Home</a>
+            <a asp-controller="Shop" asp-action="Index" class="text-uppercase fw-semibold text-dark nav-link">Shop</a>
+            <a asp-controller="About" asp-action="Index" class="text-uppercase fw-semibold text-dark nav-link">About</a>
+            <a asp-controller="Contact" asp-action="Index" class="text-uppercase fw-semibold text-dark nav-link">Contact</a>
+        </div>
+
+        <div class="logo-container text-center position-relative d-flex justify-content-center align-items-center">
+            <span class="fw-bold fs-5" style="font-family: 'Playfair Display', serif;">
+                Elysian <span class="text-rose">Jewels</span>
+            </span>
+
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="ring-icon">
+                <path fill="#DEB64B" d="M15.41 7l1.3-1.29a1 1 0 0 0-1.42-1.42L14 5.59 12.71 4.3a1 1 0 0 0-1.42 1.42L12.59 7 11 8.59A7 7 0 1 0 19.41 8.59zM12 20a5 5 0 1 1 5-5 5 5 0 0 1-5 5z" />
+            </svg>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <!-- Simple profile link to Account page -->
+                <a asp-controller="Account" asp-action="Index" class="text-dark" title="My Account">
+                    @{
+                        var user = await UserManager.GetUserAsync(User);
+                        if (!string.IsNullOrEmpty(user?.ProfilePicture))
+                        {
+                            <img src="@user.ProfilePicture"
+                                 alt="Profile"
+                                 class="rounded-circle"
+                                 style="width: 32px; height: 32px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <i class="fa-regular fa-user fs-5"></i>
+                        }
+                    }
+                </a>
+            }
+            else
+            {
+                <!-- Show Login page for guests -->
+                <a asp-controller="Account" asp-action="Login" class="text-dark">
+                    <i class="fa-regular fa-user fs-5"></i>
+                </a>
+            }
+            @await Component.InvokeAsync("CartSummary")
+        </div>
+    </header>
+
+    <script>
+        AOS.init();
+    </script>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer style="background-color: #1f2225; color: white; padding: 40px 0;">
+        <div style="max-width: 1200px; margin: auto; display: flex; justify-content: space-between; flex-wrap: wrap;">
+
+            <!-- Logo and About -->
+            <div style="flex: 1; min-width: 200px; padding: 20px;">
+                <h2 style="color: goldenrod;">ELYSIAN</h2>
+                <p>Your go-to destination for luxury jewellery and accessories.</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div style="flex: 1; min-width: 200px; padding: 20px;">
+                <h3 style="margin-bottom: 15px;">Quick Links</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="/" style="color: white; text-decoration: none;">Home</a></li>
+                    <li><a href="/shop" style="color: white; text-decoration: none;">Shop</a></li>
+                    <li><a href="/about" style="color: white; text-decoration: none;">About</a></li>
+                    <li><a href="/contact" style="color: white; text-decoration: none;">Contact</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div style="flex: 1; min-width: 200px; padding: 20px;">
+                <h3 style="margin-bottom: 15px;">Contact Us</h3>
+                <p>Email: support@elysian.com</p>
+                <p>Phone: +92-123-4567890</p>
+                <p>Location: Lahore, Pakistan</p>
+            </div>
+
+        </div>
+
+        <hr style="margin: 30px auto; border-color: #444; width: 90%;" />
+
+        <p style="text-align: center; color: #aaa;">&copy; 2025 ELYSIAN. All rights reserved.</p>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
