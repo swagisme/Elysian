@@ -70,6 +70,19 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+var builder = WebApplication.CreateBuilder(args);
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+
+builder.WebHost.UseUrls($"http://*:{port}");
+
+var app = builder.Build();
+
+app.UseStaticFiles();
+
+app.MapDefaultControllerRoute();
+
+app.Run();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
